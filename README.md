@@ -62,7 +62,7 @@ Enterprise Distribution Management System (DMS) Web Portal implemented directly 
 ## Tech Stack
 - **UI Framework:** Bootstrap 5.3.3 (HTML5, CSS3, JavaScript)
 - **Icons:** Bootstrap Icons 1.11.3
-- **Design Tokens:** Extracted from Figma `[South Africa] DMS Web` (`#1890FF`, `#F0F2F5`, `#FAFAFA`)
+- **Design Tokens:** Enterprise Wilmar Green theme (`#006638`, `#F0F2F5`, `#FAFAFA`)
 - **Deployment:** GitHub Actions + GitHub Pages CI/CD Workflow
 - **Alternative Build:** Vite + TypeScript bundle available in `src/`
 

@@ -8,17 +8,18 @@ export default {
     extend: {
       colors: {
         brand: {
-          primary: '#1890FF',
-          primaryHover: '#40A9FF',
-          primaryActive: '#096DD9',
+          primary: '#006638',
+          primaryHover: '#007D45',
+          primaryActive: '#004D2A',
+          primaryLight: '#E6F4EC',
           success: '#52C41A',
           warning: '#FAAD14',
           error: '#FF4D4F',
           sidebarBg: '#001529',
-          sidebarHover: '#1890FF',
+          sidebarHover: '#006638',
           border: '#D9D9D9',
           tableHeader: '#FAFAFA',
-          tableRowHover: '#E6F7FF',
+          tableRowHover: '#F2F9F5',
         }
       }
     },
