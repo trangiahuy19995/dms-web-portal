@@ -60,16 +60,26 @@ Enterprise Distribution Management System (DMS) Web Portal implemented directly 
 ---
 
 ## Tech Stack
-- **Framework:** React 18 with TypeScript
-- **Styling:** Tailwind CSS (Enterprise Design System tokens)
-- **Icons:** Lucide React
-- **Build Tool:** Vite
-- **Deployment:** GitHub Actions + GitHub Pages
+- **UI Framework:** Bootstrap 5.3.3 (HTML5, CSS3, JavaScript)
+- **Icons:** Bootstrap Icons 1.11.3
+- **Design Tokens:** Extracted from Figma `[South Africa] DMS Web` (`#1890FF`, `#F0F2F5`, `#FAFAFA`)
+- **Deployment:** GitHub Actions + GitHub Pages CI/CD Workflow
+- **Alternative Build:** Vite + TypeScript bundle available in `src/`
 
 ---
 
-## Local Development
+## Local Development & Usage
 
+### Option 1: Standalone HTML (Zero dependencies)
+You can directly open `index.html` in any modern web browser or serve it with Python / any static web server:
+```bash
+# Using Python 3
+python3 -m http.server 8080
+# Or using npx serve
+npx serve .
+```
+
+### Option 2: Build & Preview via Node
 ```bash
 # Clone the repository
 git clone https://github.com/trangiahuy19995/dms-web-portal.git
@@ -77,12 +87,6 @@ git clone https://github.com/trangiahuy19995/dms-web-portal.git
 # Navigate to project
 cd dms-web-portal
 
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
+# Build distribution files
 npm run build
 ```

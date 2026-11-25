@@ -1,17 +1,795 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231890FF'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DMS Web Portal - Salesman Transfer System</title>
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#F0F2F5] text-[#333333] font-['Roboto',sans-serif] antialiased">
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wilmar DMS Web Portal - Salesman Transfer System</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231890FF'><path d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/></svg>">
+  
+  <!-- Google Fonts: Roboto & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5.3.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  
+  <!-- Bootstrap Icons 1.11.3 -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom DMS Styles -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- Top Domain Simulation Bar (Figma Reference) -->
+  <div class="domain-bar d-flex justify-content-between align-items-center">
+    <div class="d-flex align-items-center gap-2">
+      <i class="bi bi-shield-check text-success"></i>
+      <span><strong>Enterprise Staging:</strong> https://ghana-dms.testwilmar-intl.com/salesman-transfer</span>
+    </div>
+    <div class="d-flex align-items-center gap-3">
+      <span class="text-success"><i class="bi bi-circle-fill" style="font-size: 8px;"></i> System Online</span>
+      <span>Figma Node: 40000042:31524</span>
+    </div>
+  </div>
+
+  <!-- Top Navbar -->
+  <nav class="top-navbar d-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center gap-3">
+      <!-- Sidebar Toggle -->
+      <button class="btn btn-sm btn-light border-0" id="btn-toggle-sidebar" title="Toggle Sidebar">
+        <i class="bi bi-list fs-5"></i>
+      </button>
+
+      <!-- Brand Logo & Name -->
+      <div class="d-flex align-items-center gap-2">
+        <div class="logo-badge">DMS</div>
+        <div>
+          <div class="fw-bold text-dark lh-sm" style="font-size: 0.95rem;">Wilmar DMS Web</div>
+          <div class="text-muted" style="font-size: 0.7rem;">Distribution Management System</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Center Search Bar -->
+    <div class="d-none d-md-flex align-items-center" style="width: 380px;">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-search"></i></span>
+        <input type="text" class="form-control border-start-0 ps-0" id="nav-quick-search" placeholder="Quick search salesman, distributor or menu...">
+      </div>
+    </div>
+
+    <!-- Right Account Controls -->
+    <div class="d-flex align-items-center gap-3">
+      <!-- Distributor Switcher -->
+      <div class="dropdown">
+        <button class="account-pill btn btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-building text-primary"></i>
+          <span id="current-distributor-label" class="fw-medium text-truncate" style="max-width: 220px;">5100001850 - FIO Distribution</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end shadow-sm" id="distributor-switch-menu">
+          <li><h6 class="dropdown-header">Switch Active Distributor</h6></li>
+          <li><a class="dropdown-item active" href="#" data-dist-code="5100001850">5100001850 - FIO Distribution</a></li>
+          <li><a class="dropdown-item" href="#" data-dist-code="5100001852">5100001852 - Cape Town Central</a></li>
+          <li><a class="dropdown-item" href="#" data-dist-code="5100001855">5100001855 - Johannesburg Mega Hub</a></li>
+          <li><a class="dropdown-item" href="#" data-dist-code="510001">510001 - Distributor A</a></li>
+          <li><a class="dropdown-item" href="#" data-dist-code="510002">510002 - Distributor B</a></li>
+        </ul>
+      </div>
+
+      <!-- Notifications -->
+      <button class="btn btn-sm btn-light position-relative" title="Notifications">
+        <i class="bi bi-bell"></i>
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.65rem;">
+          3
+        </span>
+      </button>
+
+      <!-- User Profile -->
+      <div class="d-flex align-items-center gap-2 border-start ps-3">
+        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 32px; height: 32px; font-size: 0.75rem;">
+          WA
+        </div>
+        <div class="d-none d-lg-block text-start lh-1">
+          <div class="fw-semibold text-dark" style="font-size: 0.8125rem;">Wilmar Admin</div>
+          <small class="text-muted" style="font-size: 0.7rem;">System Administrator</small>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Breadcrumb Bar -->
+  <div class="breadcrumb-bar d-flex align-items-center justify-content-between">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted" id="breadcrumb-home">Home</a></li>
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Transfer</a></li>
+        <li class="breadcrumb-item"><a href="#" class="text-decoration-none text-muted">Salesman</a></li>
+        <li class="breadcrumb-item active text-primary fw-medium" id="breadcrumb-current" aria-current="page">Salesman Migration List</li>
+      </ol>
+    </nav>
+    <div class="text-muted" style="font-size: 0.75rem;">
+      <i class="bi bi-calendar3 me-1"></i>
+      <span id="live-datetime">2026-10-13</span>
+    </div>
+  </div>
+
+  <!-- Main Container: Sidebar + Content -->
+  <div class="d-flex">
+    
+    <!-- Collapsible Sidebar -->
+    <aside class="dms-sidebar d-flex flex-column justify-content-between" id="sidebar">
+      <div class="pt-2">
+        <nav class="nav flex-column">
+          <a class="sidebar-link" href="#" title="Dashboard">
+            <i class="bi bi-speedometer2 fs-6"></i>
+            <span class="sidebar-text">Dashboard</span>
+          </a>
+          <a class="sidebar-link" href="#" title="Master Data">
+            <i class="bi bi-database fs-6"></i>
+            <span class="sidebar-text">Master Data</span>
+          </a>
+          <a class="sidebar-link" href="#" title="Sales Order">
+            <i class="bi bi-cart3 fs-6"></i>
+            <span class="sidebar-text">Sales Order</span>
+          </a>
+          <a class="sidebar-link" href="#" title="Inventory">
+            <i class="bi bi-box-seam fs-6"></i>
+            <span class="sidebar-text">Inventory</span>
+          </a>
+          
+          <!-- Transfer Module (Active) -->
+          <div class="sidebar-link active d-flex justify-content-between align-items-center" role="button" id="sidebar-transfer-parent" title="Transfer">
+            <div class="d-flex align-items-center gap-3">
+              <i class="bi bi-arrow-left-right fs-6"></i>
+              <span class="sidebar-text">Transfer</span>
+            </div>
+            <i class="bi bi-chevron-down sidebar-text" style="font-size: 0.7rem;"></i>
+          </div>
+
+          <!-- Sub-menu for Transfer -->
+          <div class="ps-4 pb-2 pt-1 border-start ms-4 sidebar-text" id="transfer-subitems">
+            <a href="#" class="d-block py-1 text-primary fw-semibold text-decoration-none" id="nav-salesman-transfer" style="font-size: 0.8rem;">
+              • Salesman Transfer
+            </a>
+            <a href="#" class="d-block py-1 text-secondary text-decoration-none" style="font-size: 0.8rem;">
+              • Customer Transfer
+            </a>
+            <a href="#" class="d-block py-1 text-secondary text-decoration-none" style="font-size: 0.8rem;">
+              • Route Transfer
+            </a>
+          </div>
+
+          <a class="sidebar-link" href="#" title="Route & Territory">
+            <i class="bi bi-geo-alt fs-6"></i>
+            <span class="sidebar-text">Route & Territory</span>
+          </a>
+          <a class="sidebar-link" href="#" title="Reports">
+            <i class="bi bi-bar-chart fs-6"></i>
+            <span class="sidebar-text">Reports</span>
+          </a>
+          <a class="sidebar-link" href="#" title="Settings">
+            <i class="bi bi-gear fs-6"></i>
+            <span class="sidebar-text">Settings</span>
+          </a>
+        </nav>
+      </div>
+
+      <!-- Sidebar Footer -->
+      <div class="p-3 border-top text-center">
+        <button class="btn btn-sm btn-outline-secondary w-100" id="btn-sidebar-collapse" title="Collapse sidebar">
+          <i class="bi bi-chevron-left" id="btn-sidebar-icon"></i>
+          <span class="sidebar-text ms-1">Collapse Menu</span>
+        </button>
+        <div class="sidebar-text text-muted mt-2" style="font-size: 0.65rem;">
+          Wilmar DMS v2.4.0
+        </div>
+      </div>
+    </aside>
+
+    <!-- Content Workspace -->
+    <main class="flex-grow-1 p-4 overflow-auto" id="main-content">
+      
+      <!-- ========================================== -->
+      <!-- VIEW 1: SALESMAN MIGRATION LIST (Figma 40000014:14821) -->
+      <!-- ========================================== -->
+      <section id="view-list" class="view-section active">
+        <!-- Title and actions header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="fw-bold mb-1 text-dark">Salesman Migration List</h4>
+            <p class="text-muted mb-0" style="font-size: 0.8125rem;">Manage and track salesman transfers between distributors across the DMS network.</p>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2" id="btn-export-list">
+              <i class="bi bi-download"></i>
+              <span>Export</span>
+            </button>
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#importTransferModal">
+              <i class="bi bi-file-earmark-arrow-up"></i>
+              <span>Import</span>
+            </button>
+            <button class="btn btn-primary btn-sm d-flex align-items-center gap-2" id="btn-go-add">
+              <i class="bi bi-plus-lg"></i>
+              <span>Add New</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Filter Card -->
+        <div class="dms-card mb-3">
+          <div class="dms-card-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-funnel text-primary"></i>
+              <span>Search Filters</span>
+            </div>
+            <button class="btn btn-sm p-0 text-muted" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="true">
+              <i class="bi bi-chevron-up"></i>
+            </button>
+          </div>
+          <div class="collapse show" id="filterCollapse">
+            <div class="dms-card-body">
+              <form id="filter-form" class="row g-3">
+                <div class="col-md-3">
+                  <label class="form-label" for="filter-transfer-code">Transfer Code</label>
+                  <input type="text" class="form-control" id="filter-transfer-code" placeholder="e.g. ST2610130001">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label" for="filter-transfer-date">Transfer Date</label>
+                  <input type="date" class="form-control" id="filter-transfer-date">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label" for="filter-transfer-desc">Transfer Description</label>
+                  <input type="text" class="form-control" id="filter-transfer-desc" placeholder="Search by description...">
+                </div>
+                <div class="col-md-3">
+                  <label class="form-label" for="filter-transfer-type">Transfer Type</label>
+                  <select class="form-select" id="filter-transfer-type">
+                    <option value="">All Types</option>
+                    <option value="One to one">One to one</option>
+                    <option value="One to many">One to many</option>
+                    <option value="Many to one">Many to one</option>
+                  </select>
+                </div>
+                <div class="col-12 d-flex justify-content-end gap-2 pt-2 border-top">
+                  <button type="button" class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-1" id="btn-clear-filters">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                    <span>Clear</span>
+                  </button>
+                  <button type="submit" class="btn btn-primary btn-sm d-flex align-items-center gap-1" id="btn-search-filters">
+                    <i class="bi bi-search"></i>
+                    <span>Search</span>
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Table Card -->
+        <div class="dms-card">
+          <!-- Table Toolbar -->
+          <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-white">
+            <div class="d-flex align-items-center gap-2">
+              <span id="selected-count-badge" class="badge bg-primary rounded-pill d-none">0 items selected</span>
+              <button class="btn btn-outline-danger btn-sm d-none" id="btn-bulk-delete">
+                <i class="bi bi-trash me-1"></i> Delete Selected
+              </button>
+            </div>
+            <div class="text-muted" style="font-size: 0.8125rem;">
+              Total: <strong id="total-records-count">0</strong> records
+            </div>
+          </div>
+
+          <!-- Table Content -->
+          <div class="table-responsive">
+            <table class="table dms-table mb-0 align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 40px;" class="text-center">
+                    <input type="checkbox" class="form-check-input" id="check-all-transfers">
+                  </th>
+                  <th style="width: 50px;">No.</th>
+                  <th>Transfer Code</th>
+                  <th>Transfer Description</th>
+                  <th>Transfer Date</th>
+                  <th>Transfer Type</th>
+                  <th>Source Distributor</th>
+                  <th>Destination Distributor</th>
+                  <th class="text-center">Salesmen</th>
+                  <th>Status</th>
+                  <th class="text-center" style="width: 100px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="transfer-table-body">
+                <!-- Dynamically generated rows -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty State Container -->
+          <div id="list-empty-state" class="empty-state d-none">
+            <div class="empty-state-icon"><i class="bi bi-folder2-open"></i></div>
+            <h6 class="fw-semibold text-dark">No Transfer Records Found</h6>
+            <p class="text-muted mb-3">No salesman transfer requests match your active search filters.</p>
+            <button class="btn btn-outline-primary btn-sm" id="btn-reset-empty-search">Clear Filters</button>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div class="p-3 border-top d-flex justify-content-between align-items-center bg-white" id="list-pagination-bar">
+            <div class="text-muted" style="font-size: 0.75rem;">
+              Showing <span id="pagination-start">1</span> to <span id="pagination-end">3</span> of <span id="pagination-total">3</span> entries
+            </div>
+            <nav>
+              <ul class="pagination pagination-sm mb-0">
+                <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-chevron-left"></i></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item disabled"><a class="page-link" href="#"><i class="bi bi-chevron-right"></i></a></li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: ADD NEW SALESMAN TRANSFER (Figma 40000038:3526 & 40000042) -->
+      <!-- ========================================== -->
+      <section id="view-add" class="view-section">
+        <!-- Add Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-secondary btn-sm" id="btn-back-to-list" title="Back to list">
+              <i class="bi bi-arrow-left"></i>
+            </button>
+            <div>
+              <h4 class="fw-bold mb-0 text-dark">Add New Salesman Transfer</h4>
+              <p class="text-muted mb-0" style="font-size: 0.8125rem;">Configure general transfer details and assign destination salesmen mappings.</p>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-secondary btn-sm" id="btn-cancel-add">Cancel</button>
+            <button class="btn btn-primary btn-sm d-flex align-items-center gap-2" id="btn-save-transfer">
+              <i class="bi bi-check2-circle"></i>
+              <span>Save Transfer</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Transfer Type Rule Alert Banner -->
+        <div class="alert alert-info py-2 px-3 mb-3 d-flex align-items-center gap-2 shadow-sm" style="font-size: 0.8125rem;">
+          <i class="bi bi-info-circle-fill text-primary fs-5"></i>
+          <span id="transfer-type-banner-text">
+            <strong>One to one Mode:</strong> Transferring salesmen from 1 single Source Distributor to 1 single Destination Distributor.
+          </span>
+        </div>
+
+        <!-- Form Container -->
+        <form id="add-transfer-form">
+          <!-- Card 1: General Info -->
+          <div class="dms-card mb-4">
+            <div class="dms-card-header">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-file-text text-primary"></i>
+                <span>General Information</span>
+              </div>
+            </div>
+            <div class="dms-card-body">
+              <div class="row g-3">
+                <!-- Transfer Code -->
+                <div class="col-md-3">
+                  <label class="form-label">Transfer Code <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control bg-light" id="add-transfer-code" readonly>
+                </div>
+
+                <!-- Transfer Date -->
+                <div class="col-md-3">
+                  <label class="form-label">Transfer Date <span class="text-danger">*</span></label>
+                  <input type="date" class="form-control" id="add-transfer-date" required>
+                </div>
+
+                <!-- Transfer Type -->
+                <div class="col-md-3">
+                  <label class="form-label">Transfer Type <span class="text-danger">*</span></label>
+                  <select class="form-select fw-semibold" id="add-transfer-type" required>
+                    <option value="One to one">One to one</option>
+                    <option value="One to many">One to many</option>
+                    <option value="Many to one">Many to one</option>
+                  </select>
+                </div>
+
+                <!-- Complete Transfer Immediate Checkbox -->
+                <div class="col-md-3 d-flex align-items-end pb-1">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="add-complete-transfer" checked>
+                    <label class="form-check-label fw-medium" for="add-complete-transfer">
+                      Complete Transfer
+                    </label>
+                  </div>
+                </div>
+
+                <!-- Transfer Description -->
+                <div class="col-12">
+                  <label class="form-label">Transfer Description <span class="text-danger">*</span></label>
+                  <input type="text" class="form-control" id="add-transfer-desc" placeholder="Enter transfer description or reason (e.g. Salesman realignment Q4)" required>
+                </div>
+
+                <!-- Source Distributor -->
+                <div class="col-md-6">
+                  <label class="form-label" id="label-source-dist">
+                    Source Distributor <span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" id="add-source-dist" required>
+                    <option value="">-- Select Source Distributor --</option>
+                    <!-- Filled dynamically -->
+                  </select>
+                  <small class="text-muted d-block mt-1" id="help-source-dist"></small>
+                </div>
+
+                <!-- Destination Distributor -->
+                <div class="col-md-6">
+                  <label class="form-label" id="label-dest-dist">
+                    Destination Distributor <span class="text-danger">*</span>
+                  </label>
+                  <select class="form-select" id="add-dest-dist" required>
+                    <option value="">-- Select Destination Distributor --</option>
+                    <!-- Filled dynamically -->
+                  </select>
+                  <small class="text-muted d-block mt-1" id="help-dest-dist"></small>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Salesman Assignment Table -->
+          <div class="dms-card mb-4">
+            <div class="dms-card-header d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-2">
+                <i class="bi bi-people text-primary"></i>
+                <span>Salesman Assignment Mapping</span>
+                <span class="badge bg-primary rounded-pill ms-2" id="badge-salesmen-count">0 Salesmen</span>
+              </div>
+              <button type="button" class="btn btn-primary btn-sm d-flex align-items-center gap-2" id="btn-open-add-salesman-modal">
+                <i class="bi bi-person-plus-fill"></i>
+                <span>Add Salesman</span>
+              </button>
+            </div>
+
+            <!-- Mapping Table -->
+            <div class="table-responsive">
+              <table class="table dms-table mb-0 align-middle">
+                <thead>
+                  <tr>
+                    <th style="width: 40px;">No.</th>
+                    <th>Salesman Code</th>
+                    <th>Salesman Name</th>
+                    <th>Type</th>
+                    <th>Email</th>
+                    <th>Source Distributor</th>
+                    <th>Destination Distributor</th>
+                    <th style="width: 170px;">Sales Position <span class="text-danger">*</span></th>
+                    <th style="width: 170px;">Main Warehouse <span class="text-danger">*</span></th>
+                    <th style="width: 160px;">Van Name</th>
+                    <th style="width: 60px;" class="text-center">Action</th>
+                  </tr>
+                </thead>
+                <tbody id="assigned-salesmen-table-body">
+                  <!-- Dynamically populated rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Empty State when no salesmen -->
+            <div id="add-empty-state" class="empty-state">
+              <div class="empty-state-icon"><i class="bi bi-people"></i></div>
+              <h6 class="fw-semibold text-dark">No Salesmen Assigned Yet</h6>
+              <p class="text-muted mb-3">Click the "Add Salesman" button above to select salesmen to transfer.</p>
+              <button type="button" class="btn btn-outline-primary btn-sm" id="btn-empty-add-salesman">
+                <i class="bi bi-person-plus-fill me-1"></i> Add Salesman
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: VIEW SALESMAN TRANSFER DETAIL (Figma 40000050:34154) -->
+      <!-- ========================================== -->
+      <section id="view-detail" class="view-section">
+        <!-- Detail Header -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-secondary btn-sm" id="btn-detail-back" title="Back to list">
+              <i class="bi bi-arrow-left"></i>
+            </button>
+            <div>
+              <div class="d-flex align-items-center gap-2">
+                <h4 class="fw-bold mb-0 text-dark">Salesman Transfer Detail</h4>
+                <span class="badge" id="detail-type-badge">One to one</span>
+                <span class="badge" id="detail-status-badge">Completed</span>
+              </div>
+              <p class="text-muted mb-0" style="font-size: 0.8125rem;">Record Code: <strong id="detail-code-label">ST2610130001</strong></p>
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-secondary btn-sm d-flex align-items-center gap-2" onclick="window.print()">
+              <i class="bi bi-printer"></i>
+              <span>Print</span>
+            </button>
+            <button class="btn btn-primary btn-sm" id="btn-detail-return">Back to List</button>
+          </div>
+        </div>
+
+        <!-- Detail General Info Card -->
+        <div class="dms-card mb-4">
+          <div class="dms-card-header">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-info-circle text-primary"></i>
+              <span>General Information</span>
+            </div>
+          </div>
+          <div class="dms-card-body">
+            <div class="row g-3">
+              <div class="col-md-3">
+                <div class="detail-label">Transfer Code</div>
+                <div class="detail-value text-primary fw-bold" id="detail-code">-</div>
+              </div>
+              <div class="col-md-3">
+                <div class="detail-label">Transfer Date</div>
+                <div class="detail-value" id="detail-date">-</div>
+              </div>
+              <div class="col-md-3">
+                <div class="detail-label">Transfer Type</div>
+                <div class="detail-value" id="detail-type">-</div>
+              </div>
+              <div class="col-md-3">
+                <div class="detail-label">Status</div>
+                <div class="detail-value" id="detail-status">-</div>
+              </div>
+              <div class="col-12">
+                <div class="detail-label">Transfer Description</div>
+                <div class="detail-value" id="detail-desc">-</div>
+              </div>
+              <div class="col-md-6">
+                <div class="detail-label">Source Distributor</div>
+                <div class="detail-value" id="detail-source-dist">-</div>
+              </div>
+              <div class="col-md-6">
+                <div class="detail-label">Destination Distributor</div>
+                <div class="detail-value" id="detail-dest-dist">-</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detail Salesman Assignment Table Card -->
+        <div class="dms-card mb-4">
+          <div class="dms-card-header d-flex justify-content-between align-items-center">
+            <div class="d-flex align-items-center gap-2">
+              <i class="bi bi-people text-primary"></i>
+              <span>Transferred Salesmen Mappings</span>
+            </div>
+            <span class="badge bg-secondary rounded-pill" id="detail-count-badge">0 Salesmen</span>
+          </div>
+          <div class="table-responsive">
+            <table class="table dms-table mb-0 align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">No.</th>
+                  <th>Salesman Code</th>
+                  <th>Salesman Name</th>
+                  <th>Type</th>
+                  <th>Email</th>
+                  <th>Source Distributor</th>
+                  <th>Destination Distributor</th>
+                  <th>Assigned Position</th>
+                  <th>Main Warehouse</th>
+                  <th>Assigned Van</th>
+                </tr>
+              </thead>
+              <tbody id="detail-salesmen-table-body">
+                <!-- Dynamically filled -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 1: ADD SALESMAN MODAL (Figma 40000050:31546) -->
+  <!-- ========================================== -->
+  <div class="modal fade" id="addSalesmanModal" tabindex="-1" aria-labelledby="addSalesmanModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="addSalesmanModalLabel">
+            <i class="bi bi-person-plus text-primary me-2"></i>Select Salesman to Transfer
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- 5-Field Search Form (Figma Specification) -->
+          <div class="card p-3 bg-light border-0 mb-3">
+            <form id="modal-salesman-filter-form" class="row g-2">
+              <div class="col-md-4">
+                <label class="form-label" for="modal-filter-dist">Distributor</label>
+                <select class="form-select form-select-sm" id="modal-filter-dist">
+                  <option value="">All Distributors</option>
+                  <!-- Populated from mockDistributors -->
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label" for="modal-filter-type">Salesman Type</label>
+                <select class="form-select form-select-sm" id="modal-filter-type">
+                  <option value="">All Types</option>
+                  <option value="Pre sales">Pre sales</option>
+                  <option value="Van sales">Van sales</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label" for="modal-filter-code">Salesman Code</label>
+                <input type="text" class="form-control form-select-sm" id="modal-filter-code" placeholder="e.g. FIO_V01">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="modal-filter-name">Salesman Name</label>
+                <input type="text" class="form-control form-select-sm" id="modal-filter-name" placeholder="Search by name...">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label" for="modal-filter-email">Email</label>
+                <input type="text" class="form-control form-select-sm" id="modal-filter-email" placeholder="Search by email...">
+              </div>
+              <div class="col-12 d-flex justify-content-end gap-2 pt-2">
+                <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-modal-filter-reset">
+                  <i class="bi bi-arrow-counterclockwise me-1"></i> Reset
+                </button>
+                <button type="submit" class="btn btn-primary btn-sm" id="btn-modal-filter-search">
+                  <i class="bi bi-search me-1"></i> Search Pool
+                </button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Pool Table -->
+          <div class="table-responsive border rounded">
+            <table class="table dms-table mb-0 align-middle">
+              <thead>
+                <tr>
+                  <th style="width: 40px;" class="text-center">
+                    <input type="checkbox" class="form-check-input" id="check-all-modal-salesmen">
+                  </th>
+                  <th>Salesman Code</th>
+                  <th>Salesman Name</th>
+                  <th>Salesman Type</th>
+                  <th>Email</th>
+                  <th>Current Distributor</th>
+                </tr>
+              </thead>
+              <tbody id="modal-salesman-pool-body">
+                <!-- Dynamically filled -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Empty state for modal pool -->
+          <div id="modal-empty-state" class="empty-state d-none">
+            <i class="bi bi-person-x fs-1 text-muted"></i>
+            <h6 class="mt-2 text-dark">No Salesmen Found</h6>
+            <p class="text-muted mb-0">Try adjusting your filters above or check another distributor.</p>
+          </div>
+        </div>
+
+        <div class="modal-footer d-flex justify-content-between align-items-center">
+          <div class="text-muted" style="font-size: 0.8125rem;">
+            Selected: <strong class="text-primary" id="modal-selected-count">0</strong> salesmen
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm d-flex align-items-center gap-1" id="btn-confirm-add-salesmen">
+              <i class="bi bi-check-lg"></i>
+              <span>Add to Transfer</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL 2: IMPORT TRANSFER MODAL -->
+  <!-- ========================================== -->
+  <div class="modal fade" id="importTransferModal" tabindex="-1" aria-labelledby="importTransferModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="importTransferModalLabel">
+            <i class="bi bi-file-earmark-arrow-up text-primary me-2"></i>Import Salesman Transfer Data
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <!-- Step 1: Download Sample Template -->
+          <div class="mb-4">
+            <h6 class="fw-semibold text-dark mb-1">Step 1: Download Sample Excel / CSV Template</h6>
+            <p class="text-muted" style="font-size: 0.8125rem;">Use this template to prepare salesman transfer data with valid distributor and warehouse codes.</p>
+            <button class="btn btn-outline-primary btn-sm d-flex align-items-center gap-2" id="btn-download-sample-template">
+              <i class="bi bi-file-earmark-spreadsheet"></i>
+              <span>Download Sample CSV Template</span>
+            </button>
+          </div>
+
+          <hr class="my-3">
+
+          <!-- Step 2: Upload Zone -->
+          <div class="mb-3">
+            <h6 class="fw-semibold text-dark mb-1">Step 2: Upload Completed CSV File</h6>
+            <div class="dropzone-box" id="import-dropzone">
+              <i class="bi bi-cloud-arrow-up fs-1 text-primary mb-2 d-block"></i>
+              <p class="fw-medium mb-1">Click to browse or drag and drop your CSV file here</p>
+              <small class="text-muted">Supports .csv or .txt (Max size 5MB)</small>
+              <input type="file" id="import-file-input" class="d-none" accept=".csv,.txt">
+            </div>
+            <div id="import-file-info" class="mt-2 text-success fw-medium d-none" style="font-size: 0.8125rem;">
+              <i class="bi bi-file-check me-1"></i> <span id="import-filename">file.csv</span> (Ready to import)
+            </div>
+          </div>
+
+          <!-- Step 3: Preview Container -->
+          <div id="import-preview-container" class="d-none">
+            <h6 class="fw-semibold text-dark mb-2">Preview Parsed Records (<span id="import-preview-count">0</span> items)</h6>
+            <div class="table-responsive border rounded" style="max-height: 200px;">
+              <table class="table dms-table mb-0 align-middle">
+                <thead>
+                  <tr>
+                    <th>Salesman Code</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Source Dist</th>
+                    <th>Dest Dist</th>
+                    <th>Position</th>
+                    <th>Warehouse</th>
+                  </tr>
+                </thead>
+                <tbody id="import-preview-body">
+                  <!-- Filled dynamically from CSV -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-execute-import" disabled>
+            <i class="bi bi-upload me-1"></i> Execute Import
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toast-container">
+    <div id="appToast" class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="d-flex">
+        <div class="toast-body d-flex align-items-center gap-2">
+          <i class="bi bi-check-circle-fill fs-5" id="toast-icon"></i>
+          <span id="toast-message">Operation successful!</span>
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap 5.3.3 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- DMS Mock Data -->
+  <script src="js/data.js"></script>
+
+  <!-- DMS Main Application JS -->
+  <script src="js/app.js"></script>
+
+</body>
 </html>
